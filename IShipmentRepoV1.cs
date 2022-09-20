@@ -5,5 +5,6 @@ namespace feature_flag_demo
     public interface IShipmentRepo
     {
         Task<Shipment?> GetShipmentAsync(string id);
+        public int ShipmentCount { get; }
     }
 }

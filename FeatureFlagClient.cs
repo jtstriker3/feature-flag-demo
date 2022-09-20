@@ -14,8 +14,8 @@ namespace feature_flag_demo
             this.configuration = configuration;
         }
 
-        public string? GetFlagValue(string key) =>
-                configuration.GetValue<string?>(key);
+        public T? GetFlagValue<T>(string key) =>
+                configuration.GetValue<T?>(key);
     }
 }
 

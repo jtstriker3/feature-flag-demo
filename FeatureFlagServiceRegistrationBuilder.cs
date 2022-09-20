@@ -24,7 +24,7 @@ namespace feature_flag_demo
             serviceCollection.AddScoped<TInterface>(sp =>
             {
                 var client = sp.GetRequiredService<FeatureFlagClient>();
-                var version = client.GetFlagValue(flag);
+                var version = client.GetFlagValue<string>(flag) ?? "v1";
 
                 if (versionedServices.ContainsKey(version))
                     return (TInterface)sp.GetRequiredService(versionedServices[version]);

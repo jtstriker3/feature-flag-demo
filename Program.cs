@@ -4,12 +4,14 @@ using feature_flag_demo;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-Console.WriteLine("Hello, World!");
+Console.WriteLine("Welcome to the Launch Darkly feature");
 var sp = BuildDi();
 var shipmentRepo = sp.GetRequiredService<IShipmentRepo>();
 
 Console.WriteLine(shipmentRepo.GetType().FullName);
 var shipment1 = await shipmentRepo.GetShipmentAsync("Shipment1");
+
+Console.WriteLine($"ShipmentCount: {shipmentRepo.ShipmentCount}");
 
 if (shipment1 is null)
 {
@@ -25,6 +27,9 @@ static IServiceProvider BuildDi()
 {
     var services = new ServiceCollection();
 
+    // Utility to manage execution of Logic for 
+    services.AddSingleton<FeatureExecutor>();
+
     // Setup Configuration
     var configBuilder = new ConfigurationBuilder();
     configBuilder.AddJsonFile("appsettings.json");
@@ -33,7 +38,7 @@ static IServiceProvider BuildDi()
 
 
     var featureClient = new FeatureFlagClient(config);
-    var shipmentRepoVersion = featureClient.GetFlagValue("ShipmentRepoUseIsDelete");
+    var shipmentRepoVersion = featureClient.GetFlagValue<string>("ShipmentRepoUseIsDelete");
 
     // What happens when an app is running and the feature flag is flipped??
     switch (shipmentRepoVersion)

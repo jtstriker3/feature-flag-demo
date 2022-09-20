@@ -6,8 +6,9 @@ namespace feature_flag_demo
     public class ShipmentRepoV2 : IShipmentRepo
     {
         private readonly List<Shipment> _shipments;
+        private readonly FeatureExecutor featureExecutor;
 
-        public ShipmentRepoV2()
+        public ShipmentRepoV2(FeatureExecutor featureExecutor)
         {
             _shipments = new List<Shipment>()
             {
@@ -31,6 +32,24 @@ namespace feature_flag_demo
                     Destination = "1234 bears Street, Chicago IL"
                 }
             };
+
+            featureExecutor.Execute("Add4thShipment",
+                impls: (
+                    true.ToString(),
+                    () =>
+                        {
+                            _shipments.Add(new Shipment()
+                            {
+                                ShipmentId = "Shipment4",
+                                Origin = "1234 Packers Street, Green Bay WI",
+                                Destination = "1234 bears Street, Chicago IL"
+
+                            });
+                        }
+            )
+            );
+
+            this.featureExecutor = featureExecutor;
         }
 
 
@@ -46,6 +65,8 @@ namespace feature_flag_demo
                 )
             );
         }
+
+        public int ShipmentCount => _shipments.Count();
     }
 }
 

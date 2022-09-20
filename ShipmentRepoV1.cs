@@ -44,6 +44,8 @@ namespace feature_flag_demo
                 )
             );
         }
+
+        public int ShipmentCount => _shipments.Count();
     }
 }
 
